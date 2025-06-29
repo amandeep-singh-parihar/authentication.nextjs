@@ -1,0 +1,56 @@
+# Ignore artifacts:
+build
+dist
+coverage
+
+# Node modules
+node_modules
+
+# Logs
+*.log
+yarn.lock
+package-lock.json
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.*  
+
+# Ignore config files
+.prettierrc
+.prettierrc.*
+.prettierignore
+
+# Ignore public assets
+public
+static
+
+# Ignore version control
+.git
+.gitignore
+
+# Ignore compiled files
+*.min.js
+*.bundle.js
+
+# Ignore test snapshots
+__snapshots__/
+
+# Ignore IDE settings
+.vscode/
+.idea/
+
+# Ignore next.js cache
+.next/
+out/
+
+# Ignore React Native specific
+android/
+ios/
+
+# Ignore temp files
+*.tmp
+*.swp
