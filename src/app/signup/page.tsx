@@ -22,8 +22,10 @@ export default function SignupPage() {
 		try {
 			setLoading(true);
 			const response = await axios.post('/api/users/signup', user);
+			// just like the folder api/users/signup the route
 			console.log('Signup success', response.data);
-			router.push('/login');
+			router.push('/login'); // navigate it to the login route
+			toast.success('User signup Successfully');
 		} catch (error: any) {
 			console.log('Signup failed', error.message);
 			toast.error(error.message);
@@ -80,7 +82,7 @@ export default function SignupPage() {
 
 			<button
 				onClick={onSignup}
-				className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 bg-white text-black font-black"
+				className={`p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600  text-black font-black ${buttonDisabled ? ` bg-rose-600` : ` bg-green-400`} `}
 			>
 				{buttonDisabled ? 'No Signup' : 'Signup'}
 			</button>

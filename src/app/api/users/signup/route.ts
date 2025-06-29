@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 
 connect();
 
-export default async function POST(request: NextRequest) {
+export async function POST(request: NextRequest) {
 	try {
 		const reqBody = await request.json();
 		const { username, email, password } = reqBody;
@@ -25,6 +25,7 @@ export default async function POST(request: NextRequest) {
 		if (user) {
 			return NextResponse.json({
 				error: 'User already exists',
+				status: 400,
 			});
 		}
 
@@ -32,18 +33,22 @@ export default async function POST(request: NextRequest) {
 		const salt = await bcrypt.genSalt(10);
 		const hashedPassword = await bcrypt.hash(password, salt);
 
+		// new user
 		const newUser = new User({
 			username,
 			email,
-			passowrd: hashedPassword,
+			password: hashedPassword,
 		});
 
 		const savedUser = await newUser.save();
 		console.log(savedUser);
-	} catch (error: any) {
+
+		// sending the response
 		return NextResponse.json({
-			error: error.message,
-			success: true,
+			message: 'User created successfully',
+			status: 201,
 		});
+	} catch (error: any) {
+		return NextResponse.json({ error: error.message }, { status: 500 });
 	}
 }
