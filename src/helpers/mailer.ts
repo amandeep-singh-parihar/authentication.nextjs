@@ -12,7 +12,7 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
 				verifyToken: hashedToken,
 				verifyTokenExpiry: Date.now() + 3600000,
 			});
-		} else if (emailType === 'RESET') {
+		} else if (emailType === 'FORGOT_PASSWORD') {
 			await User.findByIdAndUpdate(userId, {
 				forgotPasswordToken: hashedToken,
 				forgotPasswordTokenExpiry: Date.now() + 3600000,
@@ -30,6 +30,11 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
 			},
 		});
 
+		const link =
+			emailType === 'VERIFY'
+				? `${process.env.DOMAIN}/verifyemail?token=${hashedToken}`
+				: `${process.env.DOMAIN}/forgotpassword?token=${hashedToken}`;
+
 		const mailOptions = {
 			from: 'pisn604@gmail.com',
 			to: email,
@@ -37,10 +42,11 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
 				emailType === 'VERIFY'
 					? 'Verify your email'
 					: 'Reset your Password',
-			html: `<p>Click <a href="${process.env.DOMAIN}/verifyemail?token=${hashedToken}"> here </a> to ${emailType === 'VERIFY' ? 'Verify your email' : 'reset your password'}</p>`,
+			html: `<p>Click <a href="${link}"> here </a> to ${emailType === 'VERIFY' ? 'verify your email' : 'reset your password'}</p>`,
 		};
 
 		const mailResponse = await transport.sendMail(mailOptions);
+		console.log('Mail response:', mailResponse);
 		return mailResponse;
 	} catch (error: any) {
 		throw new Error(error.message);
